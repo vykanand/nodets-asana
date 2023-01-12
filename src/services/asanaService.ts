@@ -1,15 +1,15 @@
 import * as asana from 'asana';
 import { workspaceData, workspaces } from '../models/asana/workspaceData';
+import { taskModel } from '../models/asana/taskModel';
 import { requestConfig } from '../models/asana/requestConfig';
 import { getService } from '../utils/axisoUtils';
-import { taskModel } from '../models/asana/taskModel';
 
 //Usually a good practice to seperate the functional responsibilities with help of services
 //Also its crucial to define the Return type so that we only return intended value
 export class asanaService {
-    async fetchworkspace(patValue: string): Promise<workspaceData> {
+    async fetchprojects(patValue: string, workspaceID: string) {
         const client = this.createClient(patValue);
-        return client.users.me().then((resp) => resp);
+        return client.projects.findAll({ "workspace": workspaceID }).then((resp) => resp);
     }
 
     async fetchtasks(patValue: string, projectID: string): Promise<workspaces[]> {

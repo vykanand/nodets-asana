@@ -4,8 +4,8 @@ import { asanaContoller } from './controllers/asanaController';
 const router = Router();
 const asanaCtrl = new asanaContoller();
 
-router.get('/workspaces', (request, response) => {
-    return asanaCtrl.getWorkspace(request, response);
+router.get('/projects/:workspaceID', (request, response) => {
+    return asanaCtrl.getProjects(request, response);
 });
 
 router.get('/tasks/:projectID', (request, response) => {
