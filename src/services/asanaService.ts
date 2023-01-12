@@ -1,18 +1,19 @@
 import * as asana from 'asana';
-import { workspaceData, workspaces } from '../models/asana/workspaceData';
-import { taskModel } from '../models/asana/taskModel';
+import { projects } from '../models/asana/projectsModel';
+import { taskModel, tasksData } from '../models/asana/taskModel';
 import { requestConfig } from '../models/asana/requestConfig';
 import { getService } from '../utils/axisoUtils';
+import { serviceInterface } from '../models/asana/serviceModel';
 
 //Usually a good practice to seperate the functional responsibilities with help of services
 //Also its crucial to define the Return type so that we only return intended value
-export class asanaService {
-    async fetchprojects(patValue: string, workspaceID: string) {
+export class asanaService implements serviceInterface {
+    async fetchprojects(patValue: string, workspaceID: string): Promise<projects[]> {
         const client = this.createClient(patValue);
-        return client.projects.findAll({ "workspace": workspaceID }).then((resp) => resp);
+        return await client.projects.findAll({ "workspace": workspaceID }).then((resp) => resp.data);
     }
 
-    async fetchtasks(patValue: string, projectID: string): Promise<workspaces[]> {
+    async fetchtasks(patValue: string, projectID: string): Promise<tasksData[]> {
         const config: requestConfig = {
             headers: {
                 Accept: 'application/json',
@@ -29,7 +30,7 @@ export class asanaService {
     }
 
     createClient(patValue) {
-        return asana.Client.create().useAccessToken(patValue)
+        return asana.Client.create({ defaultHeaders: { 'Asana-Disable': 'new_user_task_lists,new_project_templates' } }).useAccessToken(patValue)
     }
 
 }

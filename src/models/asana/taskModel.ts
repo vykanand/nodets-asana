@@ -1,7 +1,8 @@
-import { workspaces } from "./workspaceData"
+import { projects } from "./projectsModel"
+
 export interface taskModel {
     gid: string,
-    projects: projectsModel[],
+    projects: projects[],
     resource_type: string,
     created_at: string,
     modified_at: string,
@@ -17,7 +18,7 @@ export interface taskModel {
     start_on: string,
     start_at: string,
     tags?: [],
-    workspace?: workspaces[],
+    workspace?: workspace[],
     num_hearts: number,
     num_likes: number,
     permalink_url: string,
@@ -29,16 +30,20 @@ export interface taskModel {
     memberships?: [],
     followers?: followersModel[]
 }
-
-export interface projectsModel {
-    gid: string,
-    resource_type: string,
-    name: string
-}
-
 export interface followersModel {
     gid: string,
     resource_type: string,
     name: string
 }
+export interface tasksData {
+    gid: string,
+    name: string,
+    resource_type: string,
+    resource_subtype?: string
+};
 
+export interface workspace {
+    gid: string,
+    resource_type: string,
+    name: string
+}
