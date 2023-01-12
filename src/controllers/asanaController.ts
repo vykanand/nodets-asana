@@ -1,3 +1,4 @@
+import * as asana from 'asana';
 import { Response, Request } from 'express';
 import { sendResponse, sendError } from '../utils/responseUtil'
 import { asanaService } from '../services/asanaService';
@@ -17,7 +18,7 @@ export class asanaContoller {
 
     async getTasks(request: Request, response: Response) {
         const patToken = processToken(response, request.headers['authorization']);
-        const { projectID } = request.body;
+        const { projectID } = request.params;
         try {
             const serviceCall = await this.serviceObject.fetchtasks(patToken, projectID);
             const projectData = jsonToString(serviceCall);
@@ -27,7 +28,16 @@ export class asanaContoller {
         }
     }
 
-    async modifyTasks(request: Request, response: Response) {
-
+    async completeTask(request: Request, response: Response) {
+        const patToken = processToken(response, request.headers['authorization']);
+        const { taskID } = request.body;
+        try {
+            const serviceCall = await this.serviceObject.completeTask(patToken, taskID);
+            const taskData = jsonToString(serviceCall);
+            sendResponse(response, taskData, 200);
+        } catch (error) {
+            sendError(response, error, 400);
+        }
     }
+
 }
