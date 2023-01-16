@@ -38,8 +38,9 @@ export interface followersModel {
 export interface tasksData {
     gid: string,
     name: string,
-    resource_type: string,
-    resource_subtype?: string
+    resource_type?: string,
+    resource_subtype?: string,
+    projectID?: string
 };
 
 export interface workspace {

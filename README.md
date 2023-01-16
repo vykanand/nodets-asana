@@ -32,7 +32,7 @@ src--
 
 ```
 Nodejs >= 14.x.x (Recommended 9.x.x)
-MongoDB >= 3.x.x
+MongoDB >= 6.x.x
 ```
 
 ## Installation:
@@ -81,10 +81,15 @@ There are 3 rest apis
 
 ```
 GET
-http://localhost:3333/workspaces
+http://localhost:3333/projects
 ```
 
-Note - No parameters are required for this endpoint
+Note - To fetch cached Projects data from DB pass caching=allowed
+
+```
+GET
+http://localhost:3333/projects?caching=allowed
+```
 
 2. REST API to get all tasks based on the project id
    Pass the projectID to fetch all the related tasks related to a project
@@ -94,7 +99,12 @@ GET
 http://localhost:3333/tasks/:projectID
 ```
 
-Note - No parameters are required for this endpoint
+Note - To fetch cached Tasks data from DB pass caching=allowed
+
+```
+GET
+http://localhost:3333/tasks/:projectID?caching=allowed
+```
 
 3. REST API to can mark a task complete
    You can Pass the taskID which you want to mark as complete

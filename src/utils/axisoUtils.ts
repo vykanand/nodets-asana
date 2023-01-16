@@ -1,10 +1,10 @@
 import axios from 'axios';
 import { requestConfig } from '../models/asana/requestConfig';
-import { workspaces } from '../models/asana/projectsModel';
+import { tasksData } from '../models/asana/taskModel';
 
-export const getService = async (url: string, config: requestConfig): Promise<workspaces[]> => {
-    return await axios.get<workspaces[]>(
+export const getTasksService = async (url: string, config: requestConfig): Promise<tasksData[]> => {
+    return await axios.get<any>(
         url,
         config,
-    ).then(res => res.data);
+    ).then(res => res.data.data);
 };

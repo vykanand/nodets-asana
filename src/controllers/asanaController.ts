@@ -8,8 +8,10 @@ export class asanaContoller {
     async getProjects(request: Request, response: Response): Promise<void> {
         const patToken = processToken(response, request.headers['authorization']);
         const { workspaceID } = request.params;
+        const caching = request.query.caching as string;
+
         try {
-            const serviceCall = await this.serviceObject.fetchprojects(patToken, workspaceID);
+            const serviceCall = await this.serviceObject.fetchprojects(patToken, workspaceID, caching);
             const workspaceData = jsonToString(serviceCall);
             sendResponse(response, workspaceData, 200);
         } catch (error) {
@@ -20,8 +22,10 @@ export class asanaContoller {
     async getTasks(request: Request, response: Response): Promise<void> {
         const patToken = processToken(response, request.headers['authorization']);
         const { projectID } = request.params;
+        const caching = request.query.caching as string;
+
         try {
-            const serviceCall = await this.serviceObject.fetchtasks(patToken, projectID);
+            const serviceCall = await this.serviceObject.fetchtasks(patToken, projectID, caching);
             const projectData = jsonToString(serviceCall);
             sendResponse(response, projectData, 200);
         } catch (error) {
