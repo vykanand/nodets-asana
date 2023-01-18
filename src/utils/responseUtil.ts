@@ -9,3 +9,7 @@ export const sendResponse = (response: Response, message: string, statuscode: nu
 export const sendError = (response: Response, error: string, statuscode: number): Response => {
     return response.status(statuscode).json(error);
 };
+
+export const checkParams = (response: Response, ...args) => {
+    args.includes(undefined) ? (() => { return response.status(400).json('Invalid params'); })() : (() => { return })
+};

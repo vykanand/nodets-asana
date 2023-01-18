@@ -1,7 +1,7 @@
-import { ProjectDatabase } from '../entities/asana/projectSchema';
-import { TaskDatabase } from '../entities/asana/taskSchema';
-import { projects } from '../models/asana/projectsModel';
-import { tasksData } from '../models/asana/taskModel';
+import { ProjectDatabase } from '../../entities/asana/projectSchema';
+import { TaskDatabase } from '../../entities/asana/taskSchema';
+import { projects } from '../../models/asana/projectsModel';
+import { tasksData } from '../../models/asana/taskModel';
 
 
 export async function saveProjectData(responseValue: projects[]): Promise<boolean> {
@@ -22,14 +22,14 @@ export async function saveTaskData(responseValue: tasksData[]): Promise<boolean>
     });
 }
 
-export async function fetchProjectData(): Promise<projects[]> {
+export async function fetchLocalProjectData(): Promise<projects[]> {
     const projectData = new ProjectDatabase();
-    const localProjectData = await projectData.collection.find({}, { projection: { _id: 0 } }).toArray() as any;
+    const localProjectData = await projectData.collection.find({}, { projection: { _id: 0 } }).toArray() as unknown;
     return localProjectData as projects[];
 }
 
-export async function fetchProjectTasks(projectID: string): Promise<tasksData[]> {
+export async function fetchLocalProjectTasks(projectID: string): Promise<tasksData[]> {
     const taskDatabase = new TaskDatabase();
-    const localtaskData = await taskDatabase.collection.find({ projectID: projectID }, { projection: { _id: 0 } }).toArray() as any;
+    const localtaskData = await taskDatabase.collection.find({ projectID: projectID }, { projection: { _id: 0 } }).toArray() as unknown;
     return localtaskData as tasksData[];
 }

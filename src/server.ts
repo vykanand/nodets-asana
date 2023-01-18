@@ -9,5 +9,11 @@ app.use(helmet());
 
 app.options('*', cors());
 
-initalizeDB();
-app.listen(3333);
+(async () => {
+    const port = process.env.SERVER_PORT;
+    const connectionStatus = await initalizeDB();
+    connectionStatus == 1 ? (() => {
+        app.listen(port);
+        console.log('Started server on ' + port)
+    })() : console.log('mongodb connection failed');
+})();

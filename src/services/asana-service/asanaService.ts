@@ -1,10 +1,10 @@
 import * as asana from 'asana';
-import { projects } from '../models/asana/projectsModel';
-import { taskModel, tasksData } from '../models/asana/taskModel';
-import { requestConfig } from '../models/asana/requestConfig';
-import { getTasksService } from '../utils/axisoUtils';
-import { serviceInterface } from '../models/asana/serviceModel';
-import { saveProjectData, saveTaskData, fetchProjectData, fetchProjectTasks } from '../services/asanaLocalDbService';
+import { projects } from '../../models/asana/projectsModel';
+import { taskModel, tasksData } from '../../models/asana/taskModel';
+import { requestConfig } from '../../models/asana/requestConfig';
+import { getTasksService } from '../../utils/axisoUtils';
+import { serviceInterface } from '../../models/asana/serviceModel';
+import { saveProjectData, saveTaskData, fetchLocalProjectData, fetchLocalProjectTasks } from '../asana-local-db/asanaLocalDbService';
 
 //Usually a good practice to seperate the functional responsibilities with help of services
 //Also its crucial to define the Return type so that we only return intended value
@@ -15,10 +15,11 @@ export class asanaService implements serviceInterface {
         if (caching == 'disallowed') {
             const client = this.createClient(patValue);
             const clientResponse = await client.projects.findAll({ "workspace": workspaceID }).then((resp) => resp.data);
+            let returnResponse: projects[] = clientResponse;
             await saveProjectData(clientResponse);
-            return clientResponse;
+            return returnResponse;
         } else if (caching == 'allowed') {
-            return fetchProjectData();
+            return fetchLocalProjectData();
         }
     }
 
@@ -38,7 +39,7 @@ export class asanaService implements serviceInterface {
             saveTaskData(taskResponse);
             return taskResponse;
         } else if (caching == 'allowed') {
-            return fetchProjectTasks(projectID);
+            return fetchLocalProjectTasks(projectID);
         }
 
     }

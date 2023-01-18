@@ -53,14 +53,6 @@ npm start
 
 Note: The default Port for the server is 3333
 
-## Development:
-
-Testing the code is easy just type
-
-```
-npm test
-```
-
 ## How REST APIS Work?
 
 ->Please create Personal Access token for using the Api following the instructions here.
@@ -122,4 +114,14 @@ You can find POSTMAN Collection for this project in the file :
 
 ```
 node-asana-postman.json
+```
+
+## Running Tests.
+
+Tests for this project can be run via command
+
+```
+npm run test
+OR
+npm run test:watch
 ```

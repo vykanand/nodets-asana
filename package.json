@@ -3,10 +3,15 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "start": "tsnd --transpile-only --respawn --watch node_modules src/server.ts"
+    "start": "tsnd --transpile-only --respawn --watch node_modules src/server.ts",
+    "build": "rimraf ./build && tsc",
+    "test": "jest --coverage --detectOpenHandles",
+    "test:watch": "jest --watch --forceExit --detectOpenHandles  --watchAll --maxWorkers=1 --timeout=30000"
   },
   "dependencies": {
+    "@testdeck/mocha": "^0.3.3",
     "@types/asana": "^0.18.11",
+    "@types/chai-http": "^4.2.0",
     "@types/cors": "^2.8.13",
     "@types/express": "^4.17.8",
     "asana": "^1.0.0",
@@ -15,14 +20,18 @@
     "dotenv": "^16.0.3",
     "express": "^4.17.1",
     "helmet": "^6.0.1",
-    "mongoose": "^6.8.3",
-    "nodemailer": "^6.4.11",
-    "uuidv4": "^6.2.3"
+    "mongoose": "^6.8.3"
   },
   "devDependencies": {
     "@types/helmet": "^4.0.0",
-    "@types/nodemailer": "^6.4.0",
+    "@types/jest": "^29.2.5",
+    "@types/mocha": "^10.0.1",
+    "babel-jest": "^29.3.1",
+    "jest": "^29.3.1",
+    "supertest": "^6.3.3",
+    "ts-jest": "^29.0.5",
+    "ts-node": "^10.9.1",
     "ts-node-dev": "^1.0.0-pre.62",
-    "typescript": "^4.0.2"
+    "typescript": "^4.9.4"
   }
 }

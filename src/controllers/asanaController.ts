@@ -1,16 +1,16 @@
 import { Response, Request } from 'express';
-import { sendResponse, sendError } from '../utils/responseUtil';
+import { sendResponse, sendError, checkParams } from '../utils/responseUtil';
 import { processToken, jsonToString } from '../utils/commonUtils';
-import { asanaService } from '../services/asanaService';
+import { asanaService } from '../services/asana-service/asanaService';
 
-export class asanaContoller {
+export class asanaController {
     serviceObject = new asanaService();
     async getProjects(request: Request, response: Response): Promise<void> {
-        const patToken = processToken(response, request.headers['authorization']);
-        const { workspaceID } = request.params;
-        const caching = request.query.caching as string;
-
         try {
+            const patToken = processToken(response, request.headers['authorization']);
+            const { workspaceID } = request.params;
+            const caching = request.query.caching as string;
+            checkParams(response, caching, workspaceID);
             const serviceCall = await this.serviceObject.fetchprojects(patToken, workspaceID, caching);
             const workspaceData = jsonToString(serviceCall);
             sendResponse(response, workspaceData, 200);
@@ -23,7 +23,7 @@ export class asanaContoller {
         const patToken = processToken(response, request.headers['authorization']);
         const { projectID } = request.params;
         const caching = request.query.caching as string;
-
+        checkParams(response, caching, projectID);
         try {
             const serviceCall = await this.serviceObject.fetchtasks(patToken, projectID, caching);
             const projectData = jsonToString(serviceCall);
