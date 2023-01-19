@@ -12,6 +12,10 @@ app_1.app.use((0, cors_1.default)());
 app_1.app.use((0, helmet_1.default)());
 app_1.app.options('*', (0, cors_1.default)());
 (async () => {
+    const port = process.env.SERVER_PORT;
     const connectionStatus = await (0, db_1.initalizeDB)();
-    connectionStatus == 1 ? app_1.app.listen(3333) : console.log('mongodb connection failed');
+    connectionStatus == 1 ? (() => {
+        app_1.app.listen(port);
+        console.log('Started server on ' + port);
+    })() : console.log('mongodb connection failed');
 })();

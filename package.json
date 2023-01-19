@@ -5,7 +5,7 @@
   "scripts": {
     "start": "tsnd --transpile-only --respawn --watch node_modules src/server.ts",
     "build": "rimraf ./build && tsc",
-    "test": "jest --coverage --detectOpenHandles",
+    "test": "jest --coverage --collectCoverageFrom='src/**/*.{ts,jxs}' --detectOpenHandles",
     "test:watch": "jest --watch --forceExit --detectOpenHandles  --watchAll --maxWorkers=1 --timeout=30000"
   },
   "dependencies": {

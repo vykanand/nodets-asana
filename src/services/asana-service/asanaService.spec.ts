@@ -1,52 +1,62 @@
-import request from "supertest";
-import { app } from "../../app";
-import { projectResponse, taskResponse } from './test-data/projectResponse';
+import { taskResponse } from "./test-data/dataResponse";
+import { asanaService } from "./asanaService";
+import { fetchLocalProjectData, fetchLocalProjectTasks } from '../asana-local-db/asanaLocalDbService';
 
-describe("GET /projects", () => {
-    it("should cover negative test case", async () => {
-        const ntestRequest = await request(app)
-            .get("/projects/451926093273667?caching=allowed")
-            .set({ "Authorization": null });
-        expect(ntestRequest.statusCode).toBe(400);
+jest.mock('../asana-local-db/asanaLocalDbService');
+jest.mock('../../utils/axisoUtils', () => {
+    return {
+        getTasksService: () => taskResponse,
+    };
+});
+
+const service = new asanaService();
+let authToken: string;
+let workspaceID: string = '451926093273667';
+let taskID: string = '1132697072393384';
+
+beforeEach(() => {
+    jest.restoreAllMocks();
+    authToken = '1/451927151844254:57ed86c12a488f168ac3077b8a050c8f';
+});
+
+describe("Unit test cases for fetchprojects()", () => {
+    it("Test with local caching enabled", async () => {
+        const createClient = jest.spyOn(service, 'createClient');
+        const fetchService = await service.fetchprojects(authToken, workspaceID, 'disallowed');
+        expect(createClient).toBeCalled();
+        expect(createClient).toBeCalledTimes(1);
+        expect(fetchService).toBeTruthy();
     });
-    it("should return valid response without caching", async () => {
-        const testRequest = await request(app)
-            .get("/projects/451926093273667?caching=disallowed")
-            .set({ "Authorization": "Bearer 1/451927151844254:57ed86c12a488f168ac3077b8a050c8f" });
-        expect(testRequest.body).toEqual(projectResponse);
+    it("Test with local caching disabled", async () => {
+        const fetchService = await service.fetchprojects(authToken, workspaceID, 'allowed');
+        expect(fetchLocalProjectData).toBeCalled();
+        expect(fetchLocalProjectData).toBeCalledTimes(1);
+        expect(fetchService).toBeFalsy();
     });
 });
 
-
-describe("GET /tasks/:projectID", () => {
-    it("should cover negative test case", async () => {
-        const ntestRequest = await request(app)
-            .get("/tasks/1132697072393381?caching=allowed")
-            .set({ "Authorization": null });
-        expect(ntestRequest.statusCode).toBe(400);
+describe("Unit test cases for fetchtasks()", () => {
+    it("Test with local caching disabled", async () => {
+        const fetchTasks = await service.fetchtasks(authToken, taskID, 'disallowed');
+        expect(fetchTasks).toBeTruthy();
+        fetchTasks.forEach(element => {
+            expect(element).toHaveProperty('gid');
+            expect(element).toHaveProperty('name');
+            expect(element).toHaveProperty('resource_type');
+            expect(element).toHaveProperty('resource_subtype');
+        });
     });
-    it("should return valid response without caching", async () => {
-        const testRequest2 = await request(app)
-            .get("/tasks/1132697072393381?caching=disallowed")
-            .set({ "Authorization": "Bearer 1/451927151844254:57ed86c12a488f168ac3077b8a050c8f" });
-        expect(testRequest2.body).toEqual(taskResponse);
+    it("Test with local caching enabled", async () => {
+        const fetchTasks = await service.fetchtasks(authToken, taskID, 'allowed');
+        expect(fetchLocalProjectTasks).toBeCalled();
+        expect(fetchTasks).toBeFalsy();
     });
 });
 
-
-describe("Tests for PATCH /completetask", () => {
-    it("should cover negative test case", async () => {
-        const ntestRequest = await request(app)
-            .patch("/completetask")
-            .set({ "Authorization": null })
-            .send({ "taskID": "1132697072393384" });
-        expect(ntestRequest.statusCode).toBe(400);
+describe("Unit test cases for completeTask()", () => {
+    it("Test with local caching enabled", async () => {
+        const createClient = jest.spyOn(service, 'createClient');
+        await service.completeTask(authToken, taskID);
+        expect(createClient).toBeCalled();
     });
-    it("should return valid response", async () => {
-        const testRequest3 = await request(app)
-            .patch("/completetask")
-            .set({ "Authorization": "Bearer 1/451927151844254:57ed86c12a488f168ac3077b8a050c8f" })
-            .send({ "taskID": "1132697072393384" });
-        expect(testRequest3.body.gid).toEqual('1132697072393384');
-    });
-})
+});

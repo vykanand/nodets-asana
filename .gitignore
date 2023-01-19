@@ -102,3 +102,4 @@ dist
 #custom filters
 .zip
 package-lock.json
+.build/

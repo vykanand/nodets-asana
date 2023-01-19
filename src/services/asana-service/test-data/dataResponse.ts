@@ -1,7 +1,4 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.taskResponse = exports.projectResponse = void 0;
-exports.projectResponse = [
+export const projectResponse = [
     {
         "gid": "1132697072393381",
         "name": "testproject1",
@@ -13,7 +10,8 @@ exports.projectResponse = [
         "resource_type": "project"
     }
 ];
-exports.taskResponse = [
+
+export const taskResponse = [
     {
         gid: '1132697072393383',
         name: 'test2 by vikas',
@@ -35,4 +33,5 @@ exports.taskResponse = [
         resource_subtype: 'default_task',
         projectID: '1132697072393381'
     }
-];
+]
+
