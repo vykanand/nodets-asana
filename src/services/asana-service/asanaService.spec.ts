@@ -1,5 +1,5 @@
 import { taskResponse } from "./test-data/dataResponse";
-import { asanaService } from "./asanaService";
+import { AsanaService } from "./asanaService";
 import { fetchLocalProjectData, fetchLocalProjectTasks } from '../asana-local-db/asanaLocalDbService';
 
 jest.mock('../asana-local-db/asanaLocalDbService');
@@ -9,7 +9,7 @@ jest.mock('../../utils/axisoUtils', () => {
     };
 });
 
-const service = new asanaService();
+const service = new AsanaService();
 let authToken: string;
 let workspaceID: string = '451926093273667';
 let taskID: string = '1132697072393384';

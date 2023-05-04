@@ -1,8 +1,15 @@
 import { Router } from 'express';
-import { asanaController } from './controllers/asanaController';
+import { AsanaController } from './controllers/asanaController';
 
 const router = Router();
-const asanaCtrl = new asanaController();
+const asanaCtrl = new AsanaController();
+
+router.use((request, response, next) => {
+    response.setHeader('Access-Control-Allow-Origin', '*');
+    response.setHeader('Access-Control-Allow-Headers', 'Authorization, Content-Type');
+    response.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
+    next();
+  });
 
 router.get('/projects/:workspaceID', (request, response) => {
     return asanaCtrl.getProjects(request, response);

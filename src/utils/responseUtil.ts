@@ -10,6 +10,4 @@ export const sendError = (response: Response, error: string, statuscode: number)
     return response.status(statuscode).json(error);
 };
 
-export const checkParams = (response: Response, ...args) => {
-    args.includes(undefined) ? (() => { return response.status(400).json('Invalid params'); })() : (() => { return })
-};
+export const checkParams = (response: Response, ...args) => args.some(arg => arg === undefined) ? (response.status(400).json('Invalid params'), false) : true;

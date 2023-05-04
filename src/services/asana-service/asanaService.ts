@@ -10,7 +10,7 @@ import { saveProjectData, saveTaskData, fetchLocalProjectData, fetchLocalProject
 //Also its crucial to define the Return type so that we only return intended value
 
 //Note: Always use business logic in service layer.So we will be doing our LocalDB caching operations here. 
-export class asanaService implements serviceInterface {
+export class AsanaService implements serviceInterface {
     async fetchprojects(patValue: string, workspaceID: string, caching: string): Promise<projects[]> {
         if (caching == 'disallowed') {
             const client = this.createClient(patValue);
